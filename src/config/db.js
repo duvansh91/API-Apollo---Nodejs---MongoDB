@@ -1,24 +1,22 @@
 const MongoClient = require('mongodb').MongoClient;
-var mongodb;
-
 const uri = "mongodb+srv://test:qQABtFC@F7p7J6q@cluster0-or0da.mongodb.net/test?retryWrites=true&w=majority";
+let mongodb;
 
-function connect(callback) {
-
+const connect = (callback) => {
     MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
         if (error) {
-          throw error;
+            throw error;
         }
         mongodb = client.db('test')
         callback();
-      });
+    });
 }
 
-function get() {
+const get = () => {
     return mongodb
 }
 
-function close() {
+const close = () => {
     mongodb.close()
 }
 
