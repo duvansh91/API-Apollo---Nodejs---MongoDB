@@ -16,3 +16,8 @@ export function findAuthor(author) {
 export function findAuthorByBook(authors) {
     return db.get().collection('authors').find({ _id: { $in: authors } }).toArray()
 }
+
+export async function createAuthor(args) {
+    const authorCreated = await db.get().collection('authors').insertOne(args)
+    return authorCreated.ops[0]
+}

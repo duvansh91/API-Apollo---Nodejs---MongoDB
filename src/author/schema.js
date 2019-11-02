@@ -15,4 +15,8 @@ extend type Query {
   author(_id: String!): Author
 }
 
+extend type Mutation {
+  createAuthor(firstName: String!, lastName: String!, country: String): Author
+}
+
 `
