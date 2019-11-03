@@ -1,10 +1,51 @@
 import db from '../config/db'
 import mongodb from 'mongodb'
+import { findAuthorByName } from '../author/service'
+import { findPublisherByName } from '../publisher/service'
 
-var ObjectId = mongodb.ObjectId;
+var ObjectId = mongodb.ObjectId
 
-export function findBooks() {
-    return db.get().collection('books').find({}).toArray()
+//Filter by title, author's firstName or lastName, editorial's name, publication year  
+export async function findBooks(args) {
+    if (args.authorFirstName || args.authorLastName) {
+        var author = await findAuthorByName(args.authorFirstName, args.authorLastName)
+    } else {
+        var author = ""
+    }
+
+    if (args.publisher) {
+        var publisher = await findPublisherByName(args.publisher)
+    } else {
+        var publisher = ""
+    }
+    const { title, authorFirstName, authorLastName, publicationYear, publisherId, skip, limit } = args
+    if (title || authorFirstName || authorLastName || publicationYear || publisherId) {
+        return db.get().collection('books').aggregate([
+            {
+                $match: {
+                    $or: [
+                        { title: args.title },
+                        { authors: author },
+                        { publisher: publisher._id },
+                        { publicationYear: args.publicationYear }
+                    ]
+                }
+            },
+            { $sort : { publicationYear : -1 } }
+        ]).toArray()
+    } 
+}
+
+function sortByPublicationYear(direction) {
+    return db.get().collection('books').aggregate([
+        {
+            $skip: skip
+        },
+        {
+            $limit: limit
+        },
+        { $sort : { publicationYear : -1 } }
+    ]).toArray()
 }
 
 export function findBook(book) {
@@ -24,12 +65,13 @@ export function findBooksByPublisher(publisher) {
 }
 
 export async function createBook(args) {
-    const existISBN = await findBookByISBN(args.ISBN)
-    if (existISBN !== null) throw new Error('Another Book has this ISBN')
+    const existBook = await findBookByISBN(args.ISBN)
+    if (existBook !== null) throw new Error('Another Book has this ISBN')
     //convert id string to ObjectId
     args.authors.map((id, index) => {
         args.authors[index] = ObjectId(id)
     })
+    args.publisher = ObjectId(args.publisher)
 
     const bookCreated = await db.get().collection('books').insertOne(args)
     return bookCreated.ops[0]
@@ -44,6 +86,5 @@ export async function updateBook(book) {
         { _id: ObjectId(_id) },
         { $set: book, $currentDate: { lastModified: true } }
     )
-    console.log(updated.value)
-    return updated.value
+    return await findBook(_id)
 }

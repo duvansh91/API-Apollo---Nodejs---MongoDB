@@ -2,8 +2,6 @@ import { gql } from 'apollo-server'
 
 module.exports = gql`
 
-scalar Date
-
 type Book {
   _id: String!
   title: String
@@ -15,13 +13,22 @@ type Book {
 }
 
 type Query {
-  books: [Book]
+  books(
+    limit: Int, 
+    skip:Int, 
+    title: String, 
+    authorFirstName: String,
+    authorLastName: String,
+    publisherId: String
+    publicationYear: Int
+    order: Int
+  ): [Book]
   book(_id: String!): Book
 }
 
 type Mutation{
-  createBook(title: String!, ISBN: String!, publicationYear: Int!, authors: [String!], synopsis: String): Book
-  updateBook(_id: String!, title: String, ISBN: String, publicationYear: Int, authors: [String], synopsis: String): Book
+  createBook(title: String!, ISBN: String!, publicationYear: Int!, publisher: String!, authors: [String!], synopsis: String): Book
+  updateBook(_id: String!, title: String, ISBN: String, publicationYear: Int, publisher: String, authors: [String], synopsis: String): Book
 }
 
 `

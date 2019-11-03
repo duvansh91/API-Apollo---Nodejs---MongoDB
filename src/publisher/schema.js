@@ -5,14 +5,18 @@ module.exports = gql`
 
 type Publisher {
   _id: String!
-  name: String
-  foundationYear: Date
+  name: String!
+  foundationYear: Int
   books: [Book]
 }
 
 extend type Query {
   publishers: [Publisher]
   publisher(_id: String!): Publisher
+}
+
+extend type Mutation {
+  createPublisher(name: String!, foundationYear: Int): Publisher
 }
 
 `

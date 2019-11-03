@@ -1,4 +1,4 @@
-import { findPublisher, findPublishers } from './service'
+import { findPublisher, findPublishers, createPublisher } from './service'
 import { findBooksByPublisher } from '../book/service'
 
 module.exports = {
@@ -13,6 +13,11 @@ module.exports = {
     Publisher: {
         books: async (publisher) =>{
             return await findBooksByPublisher(publisher._id)
+        }
+    },
+    Mutation: {
+        createPublisher: (obj, args) => {
+            return createPublisher(args)
         }
     }
 }

@@ -4,8 +4,8 @@ import { findPublisher } from '../publisher/service'
 
 module.exports = {
     Query: {
-        books: async () => {
-            return await findBooks()
+        books: async (obj, args) => {
+            return await findBooks(args)
         },
         book: async (parent, args, context, info) => {
             return await findBook(args._id)
