@@ -3,7 +3,7 @@ import { gql } from 'apollo-server'
 module.exports = gql`
 
 type Author {
-  _id: String!
+  _id: String
   firstName: String!
   lastName: String!
   country: String

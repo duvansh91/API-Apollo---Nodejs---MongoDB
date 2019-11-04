@@ -1,14 +1,19 @@
 import db from '../config/db'
 import mongodb from 'mongodb'
 
-var ObjectId = mongodb.ObjectId;
+var ObjectId = mongodb.ObjectId
 
 export function findPublishers() {
     return db.get().collection('publishers').find({}).toArray()
 }
 
-export function findPublisherByName(name) {
-    return db.get().collection('publishers').findOne({ name: name })
+export async function findPublisherByName(name) {
+    const publisher = await db.get().collection('publishers').findOne({ name: name })
+    if (publisher) {
+        return publisher
+    } else {
+        throw new Error('This publisher not exist')
+    }
 }
 
 export function findPublisher(_id) {

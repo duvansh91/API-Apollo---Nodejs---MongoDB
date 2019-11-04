@@ -3,7 +3,7 @@ import { gql } from 'apollo-server'
 module.exports = gql`
 
 type Book {
-  _id: String!
+  _id: String
   title: String
   ISBN: String
   synopsis: String
@@ -14,14 +14,15 @@ type Book {
 
 type Query {
   books(
-    limit: Int, 
-    skip:Int, 
+    limit: Int!, 
+    skip: Int!, 
     title: String, 
     authorFirstName: String,
     authorLastName: String,
-    publisherId: String
+    publisherName: String
     publicationYear: Int
-    order: Int
+    orderTitle: Int
+    orderYear: Int
   ): [Book]
   book(_id: String!): Book
 }
