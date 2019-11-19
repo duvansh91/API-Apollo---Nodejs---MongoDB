@@ -16,8 +16,9 @@ http://localhost:3000/graphql
 
 On the playground you can querying the data (Books, Authors and Publishers) with something like this:
 
-For example 
+For example
 
+```graphql
 query{
   authors{
     _id
@@ -28,21 +29,25 @@ query{
     }
   }
 }
+```
 
 Query The Books (It has filters), limit and skip are mandatory.
 
+```graphql
 query{
  books(limit:3,skip:1,publicationYear:2000){
   title
   ISBN
  }
 }
+```
 
 -----------------------------
 # Mutate data
 
 For create Books you need the publisher id as a string, the author id or id of authors (the id must be in an array) 
 
+```graphql
 mutation{
   createBook(
     title:"Bla Bla Bla",
@@ -54,5 +59,6 @@ mutation{
     _id
   }
 }
+```
 
 
