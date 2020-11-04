@@ -1,27 +1,33 @@
-const MongoClient = require('mongodb').MongoClient
-const uri = "mongodb+srv://test:qQABtFC@F7p7J6q@cluster0-or0da.mongodb.net/test?retryWrites=true&w=majority"
-let mongodb
+const MongoClient = require("mongodb").MongoClient;
+const { DB } = require("../utils/constants");
+
+const uri = DB;
+let mongodb;
 
 const connect = (callback) => {
-    MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
-        if (error) {
-            throw error
-        }
-        mongodb = client.db('test')
-        callback()
-    })
-}
+  MongoClient.connect(
+    uri,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    (error, client) => {
+      if (error) {
+        throw error;
+      }
+      mongodb = client.db("test");
+      callback();
+    }
+  );
+};
 
 const get = () => {
-    return mongodb
-}
+  return mongodb;
+};
 
 const close = () => {
-    mongodb.close()
-}
+  mongodb.close();
+};
 
 module.exports = {
-    connect,
-    get,
-    close
-}
+  connect,
+  get,
+  close,
+};
